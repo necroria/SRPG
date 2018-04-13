@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BattleManager">
+    <Position X="5" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="BattleManager.SELECTUNITSTATE">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Battle\BattleManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="BattleManager.UNITSTATE">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Battle\BattleManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>HAVEFgAQAOAAYCQAAAIA0YAkoIxAAAAAGAAAgCQAAAA=</HashCode>
+      <FileName>Assets\Scripts\Battle\BattleManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Map">
+    <Position X="0.5" Y="5.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Map.PosInfo" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Battle\Map.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Struct Name="Map.Pos" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Battle\Map.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Enum Name="Map.POSTYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Battle\Map.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAIDACEAAAAAAiAgAEEQACIAgAgAAAgAACAAACAAI=</HashCode>
+      <FileName>Assets\Scripts\Battle\Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MovableTileSearch">
+    <Position X="0.5" Y="1.25" Width="2.75" />
+    <NestedTypes>
+      <Class Name="MovableTileSearch.Node" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Battle\MovableTileSearch.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAUEAAAACAAIAAAAAIAEAAAAQAAAAAAAAAAAABIIAA=</HashCode>
+      <FileName>Assets\Scripts\Battle\MovableTileSearch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MovingTiles">
+    <Position X="7.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAQBEAAAACAAAAAAAABBAgAAAgAAAAAIAAADAAhAAAA=</HashCode>
+      <FileName>Assets\Scripts\Battle\MovingTiles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MainCameraCtrl">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAIAAAAAAAAAAAAAAAAAADqAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Camera\MainCameraCtrl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

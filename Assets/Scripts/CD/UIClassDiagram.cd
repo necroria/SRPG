@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BattleInfoPanel">
+    <Position X="9" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAgAIAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UIScript\BattleInfoPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BattleUI">
+    <Position X="7" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAACAAAAAAAAAABAgAAAAEAAQAAAACAEAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UIScript\BattleUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BtnPanel">
+    <Position X="10.75" Y="2.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="BtnPanel.BUTTONKIND">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\UIScript\BtnPanel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAACAgIAAAIAAAAAAEAIQAABAAAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\UIScript\BtnPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyPanel">
+    <Position X="10.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UIScript\MyPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnitInfoPanel">
+    <Position X="14.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAACAAAAAIAAAAAIAABAAAAAAAQAAAAAAAgAA=</HashCode>
+      <FileName>Assets\Scripts\UIScript\UnitInfoPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnitStatePanel">
+    <Position X="12.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UIScript\UnitStatePanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UtilBtnPanel">
+    <Position X="12.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UIScript\UtilBtnPanel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

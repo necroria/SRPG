@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AnimEvent">
+    <Position X="5.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Unit\AnimEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Unit">
+    <Position X="1.75" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Unit.CATEGORY" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Unit\Unit.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Unit.IDENTIFY" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Unit\Unit.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Struct Name="Unit.Status" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Unit\Unit.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="Unit.EquipItem" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Unit\Unit.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EYIBAAAIASAAAAAAAAAAwYAAEIGUAgAJhABKAAUAAAA=</HashCode>
+      <FileName>Assets\Scripts\Unit\Unit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnitAnimCtrl">
+    <Position X="4" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAIAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Unit\UnitAnimCtrl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnitCategory">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Struct Name="UnitCategory.Info" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Unit\UnitCategory.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAABAAAAAAAAAAAAAAAAEAAAAAIAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Unit\UnitCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnitCategoryManager">
+    <Position X="4" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AQQAAAAAACAAAAAACAAAAAAAAAAAiEAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Unit\UnitCategoryManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AttackRange">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAEAAAAAAAAAAIAgAIABAAEAACAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Unit\AttackRange.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AttackRangeManager">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="AttackRangeManager.ATTACKRANGE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Unit\AttackRangeManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="AttackRangeManager.AttackRangeComparer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Unit\AttackRangeManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAACAQCAAAAAAABAAAAAAoABAAAAQQAAECABAAAA=</HashCode>
+      <FileName>Assets\Scripts\Unit\AttackRangeManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
