@@ -82,6 +82,7 @@ public class MovableTileSearch {
 
         for(int i=0; i < exceptPos.Count; i++)
         {
+            //Debug.Log(exceptPos[i]);
             nodes.Remove(exceptPos[i]);
         }
 
@@ -117,6 +118,10 @@ public class MovableTileSearch {
     void AddNode(Node node,int x,int y,Queue<Node> queue,Unit unit, List<Map.Pos> exceptPos)
     {
         Map.Pos pos = new Map.Pos(x, y);
+        if(pos.Equals( unit.Pos))
+        {
+            return;
+        }
         if (nodes.ContainsKey(pos))
         {
             if (node.remindMovePoint <= nodes[pos].preNode.remindMovePoint)

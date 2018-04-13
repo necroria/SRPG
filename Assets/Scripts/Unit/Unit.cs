@@ -32,7 +32,7 @@ public class Unit : MonoBehaviour
     List<Passive.PASSIVENUM> passiveList = new List<Passive.PASSIVENUM>();
 
     //전투시 유닛 위치
-    Map.Pos pos;
+    [SerializeField] Map.Pos pos;
     //전투시 적대관계
     public IDENTIFY identify;
     [HideInInspector]
@@ -120,6 +120,7 @@ public class Unit : MonoBehaviour
         range = UnitCategoryManager.GetInfo(category, rank).range;
         hp = maxHp;
         mp = maxMp;
+        pos = new Map.Pos(-1, -1);
     }
     public int MovePoint
     {

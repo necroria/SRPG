@@ -8,6 +8,7 @@ using r = UnityEngine.Random;
 
 public class Map : MonoBehaviour {
     public Dictionary<Pos, PosInfo> location = new Dictionary<Pos, PosInfo>();
+    public List<PosInfo> posInfos;
     public Transform mapStartTr;
     public List<GameObject> unitPrefabs;
     //public BoxCollider coll;
@@ -18,13 +19,13 @@ public class Map : MonoBehaviour {
     public List<GameObject> unitAllyList = new List<GameObject>();
     public List<GameObject> unitEnemyList = new List<GameObject>();
     public int maxTurn;
-    
+    [Serializable]
     public class PosInfo
     {
-        int x;
-        int y;
-        POSTYPE type;
-        GameObject unit;
+        [SerializeField]int x;
+        [SerializeField] int y;
+        [SerializeField] POSTYPE type;
+        [SerializeField] GameObject unit;
         public PosInfo(int x,int y,POSTYPE type=POSTYPE.NONE,GameObject unit=null)
         {
             this.x = x;
@@ -48,8 +49,12 @@ public class Map : MonoBehaviour {
             }
             if (unit.tag == "UNIT")
             {
+                
                 this.unit = unit;
-                this.unit.GetComponent<Unit>().SetPos(x, y);
+                Unit unitScript = this.unit.GetComponent<Unit>();
+                
+                unitScript.SetPos(x, y);
+                
             }
         }
         public GameObject GetUnit()
@@ -125,7 +130,20 @@ public class Map : MonoBehaviour {
     }
     public void SetPosInfoUnit(GameObject unit,int x, int y)
     {
-        location[new Pos(x, y)].SetUnit(unit);       
+        Pos pos = new Pos(x, y);
+        SetPosInfoUnit(unit, pos);    
+    }
+    public void SetPosInfoUnit(GameObject unit, Pos pos)
+    {
+        Unit unitScript = unit.GetComponent<Unit>();
+        
+        if (CheckVaildPos(unitScript.Pos))
+        {
+            location[unitScript.Pos].SetUnit();
+        }
+
+        location[pos].SetUnit(unit);
+        
     }
     public POSTYPE GetPosType(int x, int y)
     {
@@ -154,6 +172,7 @@ public class Map : MonoBehaviour {
             }
         }
         SetStartingUnit(data["units"]);
+        posInfos = new List<PosInfo>(location.Values);
     }
     public void SetStartingUnit(JsonData unitData)
     {
@@ -163,60 +182,54 @@ public class Map : MonoBehaviour {
                 unitAllyList.Add(CreateUnit(unitData[i]));
             else if((Unit.IDENTIFY)int.Parse(unitData[i][3].ToString()) == Unit.IDENTIFY.ENEMY)
                 unitEnemyList.Add(CreateUnit(unitData[i]));
-        }
-        //unitAllyList.Add(CreateUnit(0, 0,0, Unit.IDENTIFY.ALLY, Unit.CATEGORY.ARCHER,level:50));
-        //unitAllyList.Add(CreateUnit(9, 9,0,rank:1, level: 50));        
-        //unitAllyList.Add(CreateUnit(19, 0,0, Unit.IDENTIFY.ALLY, Unit.CATEGORY.ARCHER,rank:1, level: 50));
-        //unitEnemyList.Add(CreateUnit(19, 19,1, Unit.IDENTIFY.ENEMY,rank:1, level: 50));
-        //unitEnemyList.Add(CreateUnit(0, 19, 1,Unit.IDENTIFY.ENEMY, level: 50));
-        //unitEnemyList.Add(CreateUnit(10, 9,1,Unit.IDENTIFY.ENEMY, level: 50));
+        }        
     }
     public GameObject CreateUnit(int x, int y,int unitIndex,Unit.IDENTIFY identify=Unit.IDENTIFY.ALLY,Unit.CATEGORY category = Unit.CATEGORY.KING,int rank = 0, int level = 1)
     {
         GameObject unitObject = Instantiate(unitPrefabs[unitIndex]);
         unitObject.name = String.Format("unit{0:D2}{1:D2}", x,y);
-        SetPosInfoUnit(unitObject, x, y);
+        
         Unit unit = unitObject.GetComponent<Unit>();
         
         unit.Init(unitObject.name,level,rank,category,3,new Unit.Status(r.Range(30,90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90)));
         
         
-        unit.transform.position = PosToWorldPos(unit.Pos.x, unit.Pos.y);
-        unit.identify = identify;        
-
+        
+        unit.identify = identify;
+        MoveUnit(unit, x, y);
+ 
         return unitObject;
     }
     public GameObject CreateUnit(JsonData data)
     {
         GameObject unitObject = Instantiate(unitPrefabs[int.Parse(data[2].ToString())]);
         unitObject.name = String.Format("unit{0:D2}{1:D2}", int.Parse(data[0].ToString()), int.Parse(data[1].ToString()));
-        SetPosInfoUnit(unitObject, int.Parse(data[0].ToString()), int.Parse(data[1].ToString()));
+        
         Unit unit = unitObject.GetComponent<Unit>();
 
         unit.Init(unitObject.name, int.Parse(data[6].ToString()), int.Parse(data[5].ToString()), (Unit.CATEGORY)int.Parse(data[4].ToString()), 3, new Unit.Status(r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90)));
+        
 
-
-        unit.transform.position = PosToWorldPos(unit.Pos.x, unit.Pos.y);
+         
         unit.identify = (Unit.IDENTIFY)int.Parse(data[3].ToString());
-
+        MoveUnit(unit, int.Parse(data[0].ToString()), int.Parse(data[1].ToString()));
+        
+        
         return unitObject;
     }
-    public void MoveUnit(Unit unit,int x, int y)
+    public void MoveUnit(Unit unit,int x, int y, bool posInfoChange = true)
     {
-        MoveUnit(unit, new Pos(x, y));
-
+        Pos pos = new Pos(x, y);
+        MoveUnit(unit, pos, posInfoChange);
     }
-    public void MoveUnit(Unit unit, Pos pos)
+    public void MoveUnit(Unit unit, Pos pos,bool posInfoChange=true)
     {
-        //유닛 위치 이동 컨트롤
-
         GameObject unitObject = unit.gameObject;
-        unitObject.transform.position = PosToWorldPos(pos.x,pos.y);
-        
-        //Pos정보 수정
-        location[unit.Pos].SetUnit();
-        location[pos].SetUnit(unitObject);
+        unitObject.transform.position = PosToWorldPos(pos);
+        if(posInfoChange)
+            SetPosInfoUnit(unitObject, pos);        
     }
+    
     public Pos WorldPosToMapPos(Vector3 point)
     {
         Vector3 mapPoint = point - mapStartTr.position;

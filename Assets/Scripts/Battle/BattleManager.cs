@@ -53,6 +53,10 @@ public class BattleManager : MonoBehaviour {
             mts = new MovableTileSearch(map);
             mapXSize = map.mapXSize;
             mapYSize = map.mapYSize;
+            for(int i = 0; i < map.unitAllyList.Count; i++)
+            {
+                Debug.Log(map.unitAllyList[i].GetComponent<Unit>().Pos);
+            }
             battleUI.Init(map.maxTurn);
             if (!_instance)
             {
@@ -146,11 +150,12 @@ public class BattleManager : MonoBehaviour {
         for (int i = 0; i < posList.Count; i++)
         {
 			//Debug.Log (posList [i]);
-            map.MoveUnit(unit, posList[i]);
+            map.MoveUnit(unit, posList[i],false);
             
             yield return new WaitForSeconds(.01f);
 			//yield return new WaitForEndOfFrame();
         }
+        map.SetPosInfoUnit(unit.gameObject, posList[posList.Count - 1]);
         AttackRangeManager.Instance.VisibleAttackRange(unit);
         
         battleUI.btnPanel.SetActiveButton(BtnPanel.BUTTONKIND.ATTACK, CheckHitPossible(unit));
@@ -161,12 +166,12 @@ public class BattleManager : MonoBehaviour {
         for (int i = 0; i < posList.Count; i++)
         {
             //Debug.Log (posList [i]);
-            map.MoveUnit(unit, posList[i]);
+            map.MoveUnit(unit, posList[i],false);
 
             yield return new WaitForSeconds(.01f);
             //yield return new WaitForEndOfFrame();
         }
-        Debug.Log("attack");
+        map.SetPosInfoUnit(unit.gameObject, posList[posList.Count - 1]);
         unit.UnitAnimCtrl.Attack(hitObjectUnit);
         UnitStateChange(selectUnitIndex, UNITSTATE.END);
         ClickUnitStateChange(SELECTUNITSTATE.NONE);
