@@ -416,15 +416,23 @@ public class BattleManager : MonoBehaviour {
     }
     public void TurnEnd()
     {
+        
         for (int i = 0; i < allyUnitState.Count; i++)
         {
             if (allyUnitState[i] != UNITSTATE.DEAD)
             {
                 if(allyUnitState[i]!= UNITSTATE.END)
-                    UnitStateChange(i, UNITSTATE.END);
+                {
+                    //수정 필요
+                    allyUnitState[i] = UNITSTATE.END;
+                    actUnitCount--;
+                    
+                }                    
             }
 
         }
+        //적턴으로 가는 함수 필요
+        TurnStart();
     }
     void TurnStart()
     {
@@ -433,8 +441,13 @@ public class BattleManager : MonoBehaviour {
             if (allyUnitState[i] != UNITSTATE.DEAD)
             {                
                 UnitStateChange(i, UNITSTATE.ACT);
+                
             }        
             
+        }
+        for (int i = 0; i < allyUnitState.Count; i++)
+        {
+           Debug.Log(allyUnitState[i]);
         }
         battleUI.battleInfoPanel.SetTurn(++curTurn);
         
