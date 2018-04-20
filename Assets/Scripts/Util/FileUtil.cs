@@ -57,7 +57,7 @@ public class FileUtil : MonoBehaviour {
 #endif
 
         //Object obj = Resources.Load(path) ;
-
+        //string path = Application.dataPath + "/Resources/Data/map_data_" + stageNum + ".json";
         //Debug.Log(obj);
         //if (obj)
         //{

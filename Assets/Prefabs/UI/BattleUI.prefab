@@ -558,6 +558,7 @@ MonoBehaviour:
   unitInfoPanel: {fileID: 114989031811714558}
   battleInfoPanel: {fileID: 114946214833735848}
   utilBtnPanel: {fileID: 114365896808734410}
+  panelState: 0
 --- !u!114 &114290444995665500
 MonoBehaviour:
   m_ObjectHideFlags: 1
