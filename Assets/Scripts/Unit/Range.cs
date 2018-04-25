@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackRange : MonoBehaviour {
-    public AttackRangeManager.ATTACKRANGE range;
+public class Range : MonoBehaviour {
+    
     HashSet<Transform> tiles = new HashSet<Transform>();
     public List<Map.Pos> posList = new List<Map.Pos>();
     public int maxLength=0;

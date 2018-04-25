@@ -22,7 +22,7 @@ public class BattleManager : MonoBehaviour {
     MovableTileSearch mts;
     public int mapXSize;
     public int mapYSize;
-    enum SELECTUNITSTATE {NONE,CLICKED,MOVED,ATTACKING,SKILL,END }
+    enum SELECTUNITSTATE {NONE,CLICKED,MOVED,ATTACKING,SKILL,SKILLACT,END }
     public enum UNITSTATE { ACT, END, DEAD }
     public List<UNITSTATE> allyUnitState;
     public int actUnitCount=0;
@@ -53,10 +53,10 @@ public class BattleManager : MonoBehaviour {
             mts = new MovableTileSearch(map);
             mapXSize = map.mapXSize;
             mapYSize = map.mapYSize;
-            for(int i = 0; i < map.unitAllyList.Count; i++)
-            {
-                Debug.Log(map.unitAllyList[i].GetComponent<Unit>().Pos);
-            }
+            //for(int i = 0; i < map.unitAllyList.Count; i++)
+            //{
+            //    Debug.Log(map.unitAllyList[i].GetComponent<Unit>().Pos);
+            //}
             battleUI.Init(map.maxTurn);
             if (!_instance)
             {
@@ -247,13 +247,49 @@ public class BattleManager : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hitInfo))
         {
+            if (selUnitState == SELECTUNITSTATE.SKILL)
+            {
+                ClickUnitStateChange(SELECTUNITSTATE.CLICKED);
+                return;
+            }
+            if(selUnitState == SELECTUNITSTATE.SKILLACT)
+            {
+                ClickSkillAct(hitInfo);
+                return;
+            }
             if (hitInfo.collider.CompareTag("UNIT"))
             {
-                ClickUnit(hitInfo);                
+                ClickUnit(hitInfo);
+                
             }
-            if (hitInfo.collider.name == "Map")
+            else if (hitInfo.collider.name == "Map")
             {
-                ClickMap(hitInfo);               
+                ClickMap(hitInfo);
+                
+            }
+            else if (hitInfo.collider.CompareTag("DESTROY"))
+            {
+                Debug.Log("hitDestory");
+                switch (selUnitState)
+                {
+                    case SELECTUNITSTATE.NONE:
+                        break;
+                    case SELECTUNITSTATE.CLICKED:
+                        ClickUnitStateChange(SELECTUNITSTATE.NONE);
+                        break;
+                    case SELECTUNITSTATE.MOVED:
+                        ClickUnitStateChange(SELECTUNITSTATE.CLICKED);
+                        break;
+                    case SELECTUNITSTATE.ATTACKING:
+                        ClickUnitStateChange(SELECTUNITSTATE.CLICKED);
+                        break;
+                    case SELECTUNITSTATE.SKILL:
+                        break;
+                    case SELECTUNITSTATE.SKILLACT:
+                        break;
+                    case SELECTUNITSTATE.END:
+                        break;
+                }          
             }
         }
     }
@@ -290,7 +326,6 @@ public class BattleManager : MonoBehaviour {
             return;
         }
     }
-
     void ClickUnit(RaycastHit hitInfo)
     {
         GameObject hitObject = hitInfo.collider.transform.parent.gameObject;
@@ -365,6 +400,21 @@ public class BattleManager : MonoBehaviour {
         ClickUnitStateChange(SELECTUNITSTATE.CLICKED);  
 
     }
+    void ClickSkillAct(RaycastHit hitInfo)
+    {
+        if (hitInfo.collider.CompareTag("UNIT"))
+        {
+            //범위내 대상인지 확인 후 대상이면 적용 아니면 캐릭터 선택 상태로
+        }
+        if (hitInfo.collider.name == "Map")
+        {
+            //범위 내 인지 확인 후 아니면 캐릭터 선택 상태로 맞으면 암것도 안함
+        }
+        if (hitInfo.collider.CompareTag ("DESTROY"))
+        {
+            ClickUnitStateChange(SELECTUNITSTATE.SKILL);
+        }
+    }
     private Map.Pos GetHitPos(List<Map.Pos> hitPosList, Unit hitUnit, Unit unit)
     {
         Map.Pos selUnitPos = unit.Pos;
@@ -413,6 +463,14 @@ public class BattleManager : MonoBehaviour {
     public void Attack()
     {
         ClickUnitStateChange(SELECTUNITSTATE.ATTACKING); 
+    }
+    public void Skill()
+    {
+        Unit unit = selectUnit.GetComponent<Unit>();
+        //SkillPanel.instance.gameObject.SetActive(true);
+        
+        //Debug.Log(SkillPanel.instance);
+        SkillPanel.instance.OnSkillPanel(unit,true);
     }
     public void TurnEnd()
     {
@@ -495,6 +553,30 @@ public class BattleManager : MonoBehaviour {
         UnitStateChange(selectUnitIndex, UNITSTATE.END);
         ClickUnitStateChange(SELECTUNITSTATE.NONE);
     }
+    public void ActSkill(int skillNum)
+    {
+        VisibleTiles();
+        Skill skill = SkillManager.GetSkill(skillNum);
+        Unit unit = selectUnit.GetComponent<Unit>();
+        List<Map.Pos> targetList = null;
+        switch (skill.scope)
+        {
+            
+            case global::Skill.SKILLSCOPE.ONE:
+                //개인 대상은 스킬 범위, 적용 가능 대상 보여준 후 대상 클릭 시 사용
+                SkillRangeManager.Instance.VisibleSkillRange(skill.range, unit);
+                targetList = mt.ChangeTileMaterialHitPossibleSkillRange(skill, unit);
+                break;
+            case global::Skill.SKILLSCOPE.ALL:
+                //전체 대상은 사용여부가능 후 체크 후 바로 사용
+                break;
+            case global::Skill.SKILLSCOPE.AROUND:
+                //주위 범위는 스킬 범위 적용 대상 보여준 후 사용 버튼 클릭해서 사용
+                SkillRangeManager.Instance.VisibleSkillRange(skill.range, unit);
+                targetList = mt.ChangeTileMaterialHitPossibleSkillRange(skill, unit);
+                break;
+        }
+    }
     void ClickUnitStateChange(SELECTUNITSTATE state)
     {
         if (selectUnit == null)
@@ -502,15 +584,17 @@ public class BattleManager : MonoBehaviour {
         Unit unit = selectUnit.GetComponent<Unit>();
         switch (state)
         {
-            
-            case SELECTUNITSTATE.NONE:              
-                
+
+            case SELECTUNITSTATE.NONE:
+
                 battleUI.SetActivePanel(false);
+                SkillPanel.instance.OffSkillPanel();
                 VisibleTiles();
                 break;
             case SELECTUNITSTATE.CLICKED:
-                afterPos = new Map.Pos(-1,-1);
+                afterPos = new Map.Pos(-1, -1);
                 battleUI.SetActivePanel(true, unit);
+                SkillPanel.instance.OffSkillPanel();
                 if (unit.identify == Unit.IDENTIFY.ALLY)
                 {
                     selectUnitIndex = map.unitAllyList.IndexOf(selectUnit);
@@ -523,7 +607,6 @@ public class BattleManager : MonoBehaviour {
                     {
                         battleUI.btnPanel.SetActive(false);
                     }
-
                 }
                 VisibleTiles(unit);
                 break;
@@ -540,10 +623,18 @@ public class BattleManager : MonoBehaviour {
                 mt.ChangeTileMaterialHitPossibleAttackRange(unit);
                 break;
             case SELECTUNITSTATE.SKILL:
+                //스킬창 보여주고 있는 상태
                 break;
-            
+            case SELECTUNITSTATE.SKILLACT:
+                //스킬창에서 스킬 사용을 누른 상태
+                battleUI.SetActivePanel(false);
+                SkillPanel.instance.OffSkillPanel();
+                break;
+            case SELECTUNITSTATE.END:
+                break;
             default:
                 break;
+
         }
         selUnitState = state;
     }

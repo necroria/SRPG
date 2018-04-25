@@ -7,12 +7,14 @@ public class SkillIcon : MonoBehaviour {
     public int skillNum;
     //public SkillInfoPanel skillInfoPanel;
     RawImage rawImage;
+    
 	public void Init(int skillNum)
     {
         this.skillNum = skillNum;
         rawImage = GetComponent<RawImage>();
 
         rawImage.texture = Resources.Load<Texture>("SkillIcon/"+SkillManager.GetSkill(skillNum).image);
+        
     }
     public Skill GetSkillInfo()
     {
@@ -22,4 +24,5 @@ public class SkillIcon : MonoBehaviour {
     {
         SkillPanel.instance.infoPanel.SetInfo(GetSkillInfo(), rawImage.texture);
     }
+    
 }

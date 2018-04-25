@@ -37,6 +37,7 @@ public class UnitCategoryManager : MonoBehaviour {
         infoKing.rankName = "왕";
         infoKing.movePoint = 7;
         infoKing.range = AttackRangeManager.ATTACKRANGE.ONE;
+        
         kingList.Add(infoKing);
         UnitCategory.Info infoEmperor = new UnitCategory.Info();
         infoEmperor.atkUp = 0.15f;
@@ -47,6 +48,7 @@ public class UnitCategoryManager : MonoBehaviour {
         infoEmperor.rankName = "황제";
         infoEmperor.movePoint = 8;
         infoEmperor.range = AttackRangeManager.ATTACKRANGE.ONE;
+        infoEmperor.skillNum = new int[] { 0 };
         kingList.Add(infoEmperor);
         categoryDic[Unit.CATEGORY.KING].Set(Unit.CATEGORY.KING, kingList);
 
@@ -61,6 +63,7 @@ public class UnitCategoryManager : MonoBehaviour {
         infoArcher.rankName = "아처";
         infoArcher.movePoint = 5;
         infoArcher.range = AttackRangeManager.ATTACKRANGE.TWO;
+        infoArcher.skillNum = new int[] { 1 };
         archerList.Add(infoArcher);
         UnitCategory.Info infoRanger = new UnitCategory.Info();
         infoRanger.atkUp = 0.18f;
@@ -71,6 +74,7 @@ public class UnitCategoryManager : MonoBehaviour {
         infoRanger.rankName = "레인저";
         infoRanger.movePoint = 5;
         infoRanger.range = AttackRangeManager.ATTACKRANGE.THREE;
+        infoRanger.skillNum = new int[] { 1 };
         archerList.Add(infoRanger);
         categoryDic[Unit.CATEGORY.ARCHER].Set(Unit.CATEGORY.ARCHER, archerList);
         kili=(kingList);

@@ -26,7 +26,8 @@ public class MainCameraCtrl : MonoBehaviour
     {
         if (Input.GetMouseButton(0) || (Input.touchCount > 0))
         {
-
+            if (SkillPanel.instance.gameObject.activeSelf == true)
+                return;
 #if UNITY_EDITOR
 
             y = Input.GetAxis("Mouse Y");

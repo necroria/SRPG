@@ -28,7 +28,7 @@ public class Unit : MonoBehaviour
     public int movePoint;
     public UnitAnimCtrl UnitAnimCtrl;
     public EquipItem equipItem;
-    public List<Skill.SKILLNUM> skillList = new List<Skill.SKILLNUM>();
+    public List<int> skillList = new List<int>();
     List<Passive.PASSIVENUM> passiveList = new List<Passive.PASSIVENUM>();
 
     //전투시 유닛 위치
@@ -118,6 +118,24 @@ public class Unit : MonoBehaviour
         this.stat = stat;
         movePoint = UnitCategoryManager.GetInfo(category,rank).movePoint;
         range = UnitCategoryManager.GetInfo(category, rank).range;
+        try {
+            for (int i = 0; i < UnitCategoryManager.GetInfo(category, rank).skillNum.Length; i++)
+            {
+                skillList.Add(UnitCategoryManager.GetInfo(category, rank).skillNum[i]);
+            }
+        }
+        catch (NullReferenceException)
+        {
+            if(UnitCategoryManager.GetInfo(category, rank).skillNum == null)
+            {
+                
+            }
+            else
+            {
+                Debug.Log("확인 필요");
+            }
+        }
+        
         hp = maxHp;
         mp = maxMp;
         pos = new Map.Pos(-1, -1);

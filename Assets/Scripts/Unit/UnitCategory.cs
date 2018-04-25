@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitCategory : MonoBehaviour {
+public class UnitCategory {
     Unit.CATEGORY category;
     [Serializable]
     public struct Info
@@ -19,7 +19,7 @@ public class UnitCategory : MonoBehaviour {
         public int movePoint;
         public AttackRangeManager.ATTACKRANGE range;
     }
-    List<Info> infoList = new List<Info>();
+    List<Info> infoList = null;
     public Info GetInfo(int rank)
     {
         return infoList[rank];

@@ -27,7 +27,7 @@ public class AttackRangeManager : MonoBehaviour {
     }
     ATTACKRANGE activeRange = ATTACKRANGE.NONE;
     Dictionary<ATTACKRANGE, GameObject> arDicObj = new Dictionary<ATTACKRANGE, GameObject>(new AttackRangeComparer());
-    Dictionary<ATTACKRANGE, AttackRange> arDic = new Dictionary<ATTACKRANGE, AttackRange>(new AttackRangeComparer());
+    Dictionary<ATTACKRANGE, Range> arDic = new Dictionary<ATTACKRANGE, Range>(new AttackRangeComparer());
     public List<GameObject> ars;
     public List<Material> materials;
     // Use this for initialization
@@ -39,10 +39,10 @@ public class AttackRangeManager : MonoBehaviour {
         for(int i=0; i < ars.Count; i++)
         {
             GameObject temp = Instantiate<GameObject>(ars[i], this.transform);
-            temp.GetComponent<AttackRange>().Init();
+            temp.GetComponent<Range>().Init();
             temp.SetActive(false);
             arDicObj.Add((ATTACKRANGE)i, temp) ;
-            arDic.Add((ATTACKRANGE)i, temp.GetComponent<AttackRange>());
+            arDic.Add((ATTACKRANGE)i, temp.GetComponent<Range>());
         }
 	}
 	public GameObject GetAttackRange(ATTACKRANGE range)
@@ -55,7 +55,7 @@ public class AttackRangeManager : MonoBehaviour {
             //Debug.Log(unit);
             arDicObj[unit.range].SetActive(true);
             arDicObj[unit.range].transform.position = new Vector3(unit.transform.position.x, transform.position.y, unit.transform.position.z);           
-            arDicObj[unit.range].GetComponent<AttackRange>().CheckAndVisibleTiles(unit.Pos);
+            arDicObj[unit.range].GetComponent<Range>().CheckAndVisibleTiles(unit.Pos);
             activeRange = unit.range;
         }
         else
@@ -65,7 +65,7 @@ public class AttackRangeManager : MonoBehaviour {
                 arDicObj[activeRange].SetActive(false);
                 activeRange = ATTACKRANGE.NONE;
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 if (activeRange != ATTACKRANGE.NONE)
                 {
@@ -82,6 +82,6 @@ public class AttackRangeManager : MonoBehaviour {
 
     public int GetMaxLength(ATTACKRANGE range)
     {
-        return arDicObj[range].GetComponent<AttackRange>().maxLength;
+        return arDicObj[range].GetComponent<Range>().maxLength;
     }
 }

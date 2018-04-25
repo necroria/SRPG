@@ -4,24 +4,52 @@ using UnityEngine;
 using UnityEngine.UI;
 public class SkillPanel : MonoBehaviour {
     private static SkillPanel _instance = null;
-    public static SkillPanel instance
+    
+    public static SkillPanel instance    
     {
-        get { return _instance; }
+        get {
+            //Debug.Log(_instance);
+            if (_instance == null)
+            {
+
+                _instance = GameObject.Find("CommonCanvas").transform.Find("SkillPanel").GetComponent<SkillPanel>();
+            }
+            return _instance;
+        }
     }
     
     public SkillListPanel listPanel;
     public SkillInfoPanel infoPanel;
+    public GameObject skillActButton;
     private void Awake()
     {
         DontDestroyOnLoad(this);
-        gameObject.SetActive(false);
-        if (_instance == null)
-            _instance = this;
+        
+
+        
     }
     private void Start()
     {
         RectTransform rtr = GetComponent<RectTransform>();
-        listPanel.gameObject.GetComponent<RectTransform>().sizeDelta=new Vector2(rtr.rect.size.x / 3 * 2,0);
-        infoPanel.gameObject.GetComponent< RectTransform>().sizeDelta = new Vector2(rtr.rect.size.x / 3, 0);
+        
+        RectTransform listRtr = listPanel.gameObject.GetComponent<RectTransform>();
+        RectTransform infoRtr = infoPanel.gameObject.GetComponent<RectTransform>();
+        
+        listRtr.sizeDelta = new Vector2((rtr.rect.size.x-10) / 3 * 2, 0);
+        infoRtr.sizeDelta = new Vector2((rtr.rect.size.x-10) / 3, 0);
+
+        gameObject.SetActive(false);
+    }
+    public void OnSkillPanel(Unit unit, bool isBattle=false)
+    {
+        gameObject.SetActive(true);
+        listPanel.AddSkillIcon(unit);
+        infoPanel.Clear();
+        skillActButton.SetActive(isBattle);
+        
+    }
+    public void OffSkillPanel()
+    {
+        gameObject.SetActive(false);
     }
 }

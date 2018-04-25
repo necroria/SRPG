@@ -67,7 +67,45 @@ public class MovingTiles : MonoBehaviour {
                 tiles[poslist[i]].SetActive(true);
             }
         }
+    }
+    public List<Map.Pos> ChangeTileMaterialHitPossibleSkillRange(Skill skill,Unit unit)
+    {
 
+        List<Map.Pos> poslist = SkillRangeManager.Instance.GetPossiblePos(skill.range, unit);
+        List<Map.Pos> targetPosList = new List<Map.Pos>();
+        for (int i = 0; i < poslist.Count; i++)
+        {
+
+            if (!map.CheckVaildPos(poslist[i]))
+                continue;
+            GameObject unitObj = map.GetPosUnit(poslist[i]);
+            if (unitObj == null)
+                continue;
+            Unit targetUnit = unitObj.GetComponent<Unit>();
+            //스킬사용자와 아군인 경우
+            if(skill.type==Skill.SKILLTYPE.BUFF|| skill.type == Skill.SKILLTYPE.RECOVERY)
+            {
+                if (targetUnit.identify == unit.identify)
+                {
+                    tiles[poslist[i]].GetComponent<Renderer>().sharedMaterial = materials[materials.Count - 1];
+                    tilePosition(tiles[poslist[i]], materials.Count - 1);
+                    tiles[poslist[i]].SetActive(true);
+                    targetPosList.Add(poslist[i]);
+                }
+            }
+            if (skill.type == Skill.SKILLTYPE.BUFF || skill.type == Skill.SKILLTYPE.RECOVERY)
+            {
+                if (targetUnit.identify == Unit.IDENTIFY.ENEMY)
+                {
+                    tiles[poslist[i]].GetComponent<Renderer>().sharedMaterial = materials[materials.Count - 1];
+                    tilePosition(tiles[poslist[i]], materials.Count - 1);
+                    tiles[poslist[i]].SetActive(true);
+                    targetPosList.Add(poslist[i]);
+                }
+            }
+            
+        }
+        return targetPosList;
     }
     public void ClearTiles(List<Map.Pos> posList)
     {

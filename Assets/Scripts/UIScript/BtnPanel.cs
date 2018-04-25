@@ -37,9 +37,8 @@ public class BtnPanel : MyPanel {
         BattleManager.instance.Attack();
     }
     public void Skill()
-
     {
-
+        BattleManager.instance.Skill();
     }
     public void Item()
     {

@@ -35,7 +35,7 @@ public class FileUtil : MonoBehaviour {
         string path = dataPath(stageNum);
         //string path = Application.dataPath + "/Resources/Data/map_data_" + stageNum + ".json";
         //string path = "Data/map_data_" + stageNum + ".json";
-        Debug.Log(path);
+        //Debug.Log(path);
 #if UNITY_ANDROID
         WWW file = new WWW(path);
         
