@@ -29,13 +29,14 @@ public class SkillManager : MonoBehaviour {
 
     public static Skill GetSkill(int skillNum)
     {
+        Debug.Log("skill number = " + skillNum);
         return skillList[skillNum];
     }
     public static GameObject GetSkillIcon(int skillNum)
     {
         return skillIconList[skillNum];
     }
-    public static void ActSkill(Unit user,Unit[] target,int skillNum)
+    public static void ActSkill(int skillNum,Unit user,params Unit[] target)
     {
         switch (skillNum)
         {

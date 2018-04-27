@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Unit : MonoBehaviour
 {
 
@@ -64,6 +65,15 @@ public class Unit : MonoBehaviour
             this.INT = INT;
             this.WIS = WIS;
             this.LUK = LUK;
+        }
+        public Status(string STR, string DEX, string CON, string INT, string WIS, string LUK)
+        {
+            this.STR = int.Parse(STR);
+            this.DEX = int.Parse(DEX);
+            this.CON = int.Parse(CON);
+            this.INT = int.Parse(INT);
+            this.WIS = int.Parse(WIS);
+            this.LUK = int.Parse(LUK);
         }
     }
     [Serializable]

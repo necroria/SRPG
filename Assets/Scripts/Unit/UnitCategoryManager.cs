@@ -22,6 +22,7 @@ public class UnitCategoryManager : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        Debug.Log("start UnitCategoryManager");
         //if (!_instance)
         //{
         //    _instance = this;
@@ -91,6 +92,7 @@ public class UnitCategoryManager : MonoBehaviour {
     }
     public static UnitCategory.Info GetInfo(Unit.CATEGORY category,int rank)
     {
+        
         return categoryDic[category].GetInfo(rank);
     }
 

@@ -35,7 +35,8 @@ public class BattleManager : MonoBehaviour {
     {
         get { return _instance; }
     }
-    
+    List<Map.Pos> targetPosList;//스킬 타겟
+    int actSkillNum=-1;
     private BattleManager(){}
     // Use this for initialization
     void Start () {
@@ -402,13 +403,31 @@ public class BattleManager : MonoBehaviour {
     }
     void ClickSkillAct(RaycastHit hitInfo)
     {
+        Unit selUnit = selectUnit.GetComponent<Unit>();
         if (hitInfo.collider.CompareTag("UNIT"))
         {
+            Unit targetUnit = hitInfo.collider.gameObject.GetComponentInParent<Unit>();
             //범위내 대상인지 확인 후 대상이면 적용 아니면 캐릭터 선택 상태로
+            Debug.Log(targetPosList);
+            Debug.Log(targetUnit);
+            if (targetPosList.Contains(targetUnit.Pos))
+            {
+                SkillManager.ActSkill(actSkillNum, selUnit, targetUnit);
+                SkillRangeManager.Instance.Clear();
+                VisibleTiles(); 
+            }
+            else
+            {
+                ClickUnit(hitInfo);
+            }
         }
         if (hitInfo.collider.name == "Map")
         {
             //범위 내 인지 확인 후 아니면 캐릭터 선택 상태로 맞으면 암것도 안함
+            bool contain=SkillRangeManager.Instance.GetPossiblePos(SkillManager.GetSkill(actSkillNum).range,selUnit).Contains(map.WorldPosToMapPos(hitInfo.point));
+            if (!contain)
+                ClickUnitStateChange(SELECTUNITSTATE.SKILL);
+            
         }
         if (hitInfo.collider.CompareTag ("DESTROY"))
         {
@@ -466,6 +485,7 @@ public class BattleManager : MonoBehaviour {
     }
     public void Skill()
     {
+        ClickUnitStateChange(SELECTUNITSTATE.SKILL);
         Unit unit = selectUnit.GetComponent<Unit>();
         //SkillPanel.instance.gameObject.SetActive(true);
         
@@ -555,17 +575,24 @@ public class BattleManager : MonoBehaviour {
     }
     public void ActSkill(int skillNum)
     {
-        VisibleTiles();
+        targetPosList = null;
+        actSkillNum = skillNum;
+        ClickUnitStateChange(SELECTUNITSTATE.SKILLACT);
+        mt.ClearTiles();
+        AttackRangeManager.Instance.VisibleAttackRange();
+        battleUI.btnPanel.SetActive(false);
+        SkillPanel.instance.gameObject.SetActive(false);
         Skill skill = SkillManager.GetSkill(skillNum);
         Unit unit = selectUnit.GetComponent<Unit>();
-        List<Map.Pos> targetList = null;
+        
         switch (skill.scope)
         {
             
             case global::Skill.SKILLSCOPE.ONE:
                 //개인 대상은 스킬 범위, 적용 가능 대상 보여준 후 대상 클릭 시 사용
                 SkillRangeManager.Instance.VisibleSkillRange(skill.range, unit);
-                targetList = mt.ChangeTileMaterialHitPossibleSkillRange(skill, unit);
+                targetPosList = mt.ChangeTileMaterialHitPossibleSkillRange(skill, unit);
+                
                 break;
             case global::Skill.SKILLSCOPE.ALL:
                 //전체 대상은 사용여부가능 후 체크 후 바로 사용
@@ -573,7 +600,7 @@ public class BattleManager : MonoBehaviour {
             case global::Skill.SKILLSCOPE.AROUND:
                 //주위 범위는 스킬 범위 적용 대상 보여준 후 사용 버튼 클릭해서 사용
                 SkillRangeManager.Instance.VisibleSkillRange(skill.range, unit);
-                targetList = mt.ChangeTileMaterialHitPossibleSkillRange(skill, unit);
+                targetPosList = mt.ChangeTileMaterialHitPossibleSkillRange(skill, unit);
                 break;
         }
     }
@@ -623,7 +650,12 @@ public class BattleManager : MonoBehaviour {
                 mt.ChangeTileMaterialHitPossibleAttackRange(unit);
                 break;
             case SELECTUNITSTATE.SKILL:
-                //스킬창 보여주고 있는 상태
+                //스킬창 보여주고 있는 상태              
+               
+
+                //Debug.Log(SkillPanel.instance);
+                SkillPanel.instance.OnSkillPanel(unit, true);
+                SkillRangeManager.Instance.Clear();
                 break;
             case SELECTUNITSTATE.SKILLACT:
                 //스킬창에서 스킬 사용을 누른 상태

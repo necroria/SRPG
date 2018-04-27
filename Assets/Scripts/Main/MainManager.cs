@@ -8,13 +8,24 @@ using System.IO;
 public class MainManager : MonoBehaviour {
     public static int playBattleNum = 1;
     public Text text;
+    public Player player;
+    public Transform[] mainUnitTr;
+    public WaitPlace wp;
     private void Awake()
     {
         DontDestroyOnLoad(this);
     }
+    private void Start()
+    {
+        player.Init();
+        wp.Init(player.unitPrefabList.Count);
+        SetWaitUnit();
+        SetMainUnit();
+        
+    }
     public void LoadBattleScene()
     {
-        SceneManager.LoadScene("Battle");        
+        SceneManager.LoadScene("Battle");
     }
     public static void LoadMainScene(string message)
     {
@@ -30,8 +41,20 @@ public class MainManager : MonoBehaviour {
         playBattleNum = num;
         text.text = playBattleNum + "Stage";
     }
-    private void Update()
+    void SetMainUnit()
     {
-        
+        for(int i = 0;i< mainUnitTr.Length; i++)
+        {
+            if(player.mainUnitList[i]>=0)
+                player.GetUnitObject(player.mainUnitList[i]).transform.position= mainUnitTr[i].position;
+        }      
+    }
+    void SetWaitUnit()
+    {
+        for (int i = 0; i < player.unitPrefabList.Count; i++)
+        {
+            Debug.Log(i);
+            player.GetUnitObject(i).transform.position = wp.GetPoint(i);
+        }
     }
 }

@@ -21,6 +21,7 @@ public class SkillPanel : MonoBehaviour {
     public SkillListPanel listPanel;
     public SkillInfoPanel infoPanel;
     public GameObject skillActButton;
+    Button skillActBtn;
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -37,7 +38,7 @@ public class SkillPanel : MonoBehaviour {
         
         listRtr.sizeDelta = new Vector2((rtr.rect.size.x-10) / 3 * 2, 0);
         infoRtr.sizeDelta = new Vector2((rtr.rect.size.x-10) / 3, 0);
-
+        skillActBtn = skillActButton.GetComponent<Button>();
         gameObject.SetActive(false);
     }
     public void OnSkillPanel(Unit unit, bool isBattle=false)
@@ -46,7 +47,13 @@ public class SkillPanel : MonoBehaviour {
         listPanel.AddSkillIcon(unit);
         infoPanel.Clear();
         skillActButton.SetActive(isBattle);
+        skillActBtn.interactable = false;
         
+        //skillActBtn.enabled = false;
+    }
+    public void SetSkillBtnInteract(bool value)
+    {
+        skillActBtn.interactable = value;
     }
     public void OffSkillPanel()
     {

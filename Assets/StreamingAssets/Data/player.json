@@ -1,0 +1,129 @@
+{
+  "level" : 1,
+  "gold" : 0,
+  "units": [
+    {
+      "unit": {
+        "name": "킹유니티",
+        "level": 30,
+        "cost": 5,
+        "category": 0,
+        "rank": 1,
+        "stat": {
+          "STR": 90,
+          "DEX": 90,
+          "CON": 100,
+          "INT": 80,
+          "WIS": 80,
+          "LUK": 100
+        },
+        "equip": {
+          "weapon": -1,
+          "armor": -1,
+          "assi": -1
+        },
+        "num": 0
+      },
+      "usable": true
+    },
+    {
+      "unit": {
+        "name": "레인저크에리",
+        "level": 28,
+        "cost": 4,
+        "category": 1,
+        "rank": 1,
+        "stat": {
+          "STR": 70,
+          "DEX": 100,
+          "CON": 50,
+          "INT": 70,
+          "WIS": 50,
+          "LUK": 100
+        },
+        "equip": {
+          "weapon": -1,
+          "armor": -1,
+          "assi": -1
+        },
+        "num": 1
+      },
+      "usable": true
+    },
+    {
+      "unit": {
+        "name": "아처크에리",
+        "level": 20,
+        "cost": 2,
+        "category": 1,
+        "rank": 0,
+        "stat": {
+          "STR": 60,
+          "DEX": 90,
+          "CON": 50,
+          "INT": 70,
+          "WIS": 55,
+          "LUK": 80
+        },
+        "equip": {
+          "weapon": -1,
+          "armor": -1,
+          "assi": -1
+        },
+        "num": 2
+      },
+      "usable": true
+    },
+    {
+      "unit": {
+        "name": "레인저유니티",
+        "level": 25,
+        "cost": 2,
+        "category": 1,
+        "rank": 1,
+        "stat": {
+          "STR": 60,
+          "DEX": 90,
+          "CON": 50,
+          "INT": 70,
+          "WIS": 55,
+          "LUK": 80
+        },
+        "equip": {
+          "weapon": -1,
+          "armor": -1,
+          "assi": -1
+        },
+        "num": 3
+      },
+      "usable": true
+    },
+    {
+      "unit": {
+        "name": "아처유니티",
+        "level": 1,
+        "cost": 2,
+        "category": 1,
+        "rank": 0,
+        "stat": {
+          "STR": 60,
+          "DEX": 90,
+          "CON": 50,
+          "INT": 70,
+          "WIS": 55,
+          "LUK": 80
+        },
+        "equip": {
+          "weapon": -1,
+          "armor": -1,
+          "assi": -1
+        },
+        "num": 4
+      },
+      "usable": false
+    }
+  ],
+  "main_unit_list":[0,1,2]
+  ,
+  "last_stage" : 0
+}

@@ -30,6 +30,30 @@ public class FileUtil : MonoBehaviour {
         // 여기까지 오면 성공이다.  
         //  
     }
+    public static JsonData LoadPlayerData()
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, "Data/player.json");
+#if UNITY_ANDROID
+        WWW file = new WWW(path);
+
+        if (file != null)
+        {
+            while (!file.isDone) ;
+            string jsonStr = file.text;
+            JsonData json = JsonMapper.ToObject(jsonStr);
+            return json;
+        }
+#else
+        Debug.Log(File.Exists(path));
+
+        if (File.Exists(path)){
+            string jsonStr = File.ReadAllText(path);
+            JsonData json = JsonMapper.ToObject(jsonStr);
+            return json;
+        }
+#endif
+        return null;
+    }
     public static JsonData LoadMapData(int stageNum)
     {
         string path = dataPath(stageNum);

@@ -22,6 +22,8 @@ public class SkillIcon : MonoBehaviour {
     }
     public void ClickIcon()
     {
+        //스킬이 사용가능하면 스킬 사용 버튼 온
+        SkillPanel.instance.SetSkillBtnInteract(true);
         SkillPanel.instance.infoPanel.SetInfo(GetSkillInfo(), rawImage.texture);
     }
     

@@ -93,7 +93,7 @@ public class MovingTiles : MonoBehaviour {
                     targetPosList.Add(poslist[i]);
                 }
             }
-            if (skill.type == Skill.SKILLTYPE.BUFF || skill.type == Skill.SKILLTYPE.RECOVERY)
+            if (skill.type == Skill.SKILLTYPE.OFFENSIVE || skill.type == Skill.SKILLTYPE.DEBUFF)
             {
                 if (targetUnit.identify == Unit.IDENTIFY.ENEMY)
                 {

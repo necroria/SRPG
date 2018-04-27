@@ -50,6 +50,13 @@ public class SkillRangeManager : MonoBehaviour {
     {
         return srDicObj[range];
     }
+    public void Clear()
+    {
+        if (activeRange == SKILLRANGE.NONE)
+            return;
+        srDicObj[activeRange].SetActive(false);
+        activeRange = SKILLRANGE.NONE;
+    }
     public void VisibleSkillRange(SKILLRANGE skillRange,Unit unit=null)
     {
         if (unit !=null) {
