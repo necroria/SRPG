@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using LitJson;
+using System.Text;
 
 public class FileUtil : MonoBehaviour {
 
-    public static string dataPath(int stageNum)
+    public static string dataPath(string mapCode)
     {
-        return Path.Combine(Application.streamingAssetsPath, "Data/map_data_" + stageNum + ".json");
+        return Application.streamingAssetsPath+"/Data/map_data_" + mapCode + ".json";
         //return Application.streamingAssetsPath + "/Data/map_data_" + stageNum + ".json";
     }
     //참고용
@@ -30,66 +31,83 @@ public class FileUtil : MonoBehaviour {
         // 여기까지 오면 성공이다.  
         //  
     }
+    public static List<JsonData> LoadJsonDataInFolder(string folderName)
+    {
+        
+        string path = Path.Combine(Application.streamingAssetsPath, "Data/" + folderName);
+        List<JsonData> jsonDatas = new List<JsonData>();
+        FileInfo[] info = new DirectoryInfo(path).GetFiles();
+
+        for (int i = 0; i < info.Length; i++)
+        {
+            if (info[i].Name.Contains(".meta"))
+            {
+                continue;
+            }
+            JsonData jd = LoadJData(path + "/" + info[i].Name);
+            if (jd != null)
+            {
+                jsonDatas.Add(jd);
+            }
+            
+        }
+        if (jsonDatas.Count > 0)
+        {
+            return jsonDatas;
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+    public static JsonData LoadJsonData(string fileName)
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, "Data/"+fileName+".json");
+
+        return LoadJData(path);
+    }
     public static JsonData LoadPlayerData()
     {
-        string path = Path.Combine(Application.streamingAssetsPath, "Data/player.json");
+        string path = Application.streamingAssetsPath+ "/Data/player.json";
+
+        return LoadJData(path);
+    }
+    public static JsonData LoadMapData(string mapCode)
+    {
+        string path = dataPath(mapCode);
+
+        return LoadJData(path);
+    }
+    static JsonData LoadJData(string path)
+    {
 #if UNITY_ANDROID
         WWW file = new WWW(path);
 
         if (file != null)
         {
             while (!file.isDone) ;
-            string jsonStr = file.text;
-            JsonData json = JsonMapper.ToObject(jsonStr);
+            string jsonStr = Encoding.UTF8.GetString(file.bytes);
+
+            Debug.Log(jsonStr);
+            JsonData json = JsonMapper.ToObject(jsonStr.Trim());
             return json;
         }
+   
 #else
         Debug.Log(File.Exists(path));
-
-        if (File.Exists(path)){
-            string jsonStr = File.ReadAllText(path);
-            JsonData json = JsonMapper.ToObject(jsonStr);
-            return json;
-        }
-#endif
-        return null;
-    }
-    public static JsonData LoadMapData(int stageNum)
-    {
-        string path = dataPath(stageNum);
-        //string path = Application.dataPath + "/Resources/Data/map_data_" + stageNum + ".json";
-        //string path = "Data/map_data_" + stageNum + ".json";
-        //Debug.Log(path);
-#if UNITY_ANDROID
-        WWW file = new WWW(path);
-        
-        if (file!=null)
+        if (File.Exists(path))
         {
-            while (!file.isDone) ;
-            string jsonStr = file.text;
+            string jsonStr = Encoding.UTF8.GetString(File.ReadAllBytes(path));
             JsonData json = JsonMapper.ToObject(jsonStr);
             return json;
         }
-#else
-        Debug.Log(File.Exists(path));
-
-        if (File.Exists(path)){
-            string jsonStr = File.ReadAllText(path);
-            JsonData json = JsonMapper.ToObject(jsonStr);
-            return json;
-        }
-#endif
-
-        //Object obj = Resources.Load(path) ;
-        //string path = Application.dataPath + "/Resources/Data/map_data_" + stageNum + ".json";
-        //Debug.Log(obj);
-        //if (obj)
-        //{
-        //    string jsonStr = obj.ToString();
+        //if (File.Exists(path)){
+        //    string jsonStr = File.ReadAllText(path);
         //    JsonData json = JsonMapper.ToObject(jsonStr);
         //    return json;
-        //}
-
+        }
+#endif
         return null;
     }
 }

@@ -9,8 +9,10 @@ public class Player : MonoBehaviour {
     int gold;
     int lastStage;
     public int[] mainUnitList = new int[3];
-    public List<GameObject> unitPrefabList;
-    List<GameObject> unitObjectList = new List<GameObject>();
+    Transform tr;
+    //public List<GameObject> unitPrefabList;
+    public List<GameObject> unitObjectList = new List<GameObject>();
+    public int unitCount;
     struct MyUnit
     {
         public Unit unit;
@@ -22,6 +24,41 @@ public class Player : MonoBehaviour {
             this.usable = usable;
         }
     }
+    [Serializable]
+    public class Deck
+    {
+        int[] slot;
+
+        int slotCount = 5;
+        public Deck(int slotCount)
+        {
+            this.slotCount = slotCount;
+            slot = new int[slotCount];
+            for(int i=0; i < slotCount; i++)
+            {
+                slot[i] = -1;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public int GetUnitNumber(int slotNumber)
+        {
+            return slot[slotNumber - 1];
+        }
+        public void SetUnitInSlot(int slotNumber, int unitNumber)
+        {
+            slot[slotNumber - 1] = unitNumber;
+        }
+    }
+
+    Dictionary<int, Deck> deckDic = new Dictionary<int, Deck>();
+    public Deck GetDeck(int battleNum)
+    {
+        return deckDic[battleNum];
+    }
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -29,6 +66,10 @@ public class Player : MonoBehaviour {
     List<MyUnit> myUnits = new List<MyUnit>();
 	// Use this for initialization
 	public void Init () {
+
+        tr = GetComponent<Transform>();
+
+        
         
         JsonData jsonData = null;
         do
@@ -36,28 +77,63 @@ public class Player : MonoBehaviour {
             Debug.Log("플레이어 데이터를 읽는 중입니다.");
             jsonData = FileUtil.LoadPlayerData();
         } while (jsonData==null);
+
+        SetMyDeck(jsonData["decks"]);
         
-        level = int.Parse(jsonData["level"].ToString());
-        gold = int.Parse(jsonData["gold"].ToString());
+        
+
+        level = (int)jsonData["level"];
+        gold = (int)jsonData["gold"];
         
         JsonData unitListJson = jsonData["main_unit_list"];
-        mainUnitList[0] = int.Parse(unitListJson[0].ToString());
-        mainUnitList[1] = int.Parse(unitListJson[1].ToString());
-        mainUnitList[2] = int.Parse(unitListJson[2].ToString());
-        lastStage = int.Parse(jsonData["last_stage"].ToString());
+        mainUnitList[0] = (int)unitListJson[0];
+        mainUnitList[1] = (int)unitListJson[1];
+        mainUnitList[2] = (int)unitListJson[2];
+        lastStage = (int)jsonData["last_stage"];
 
-        for(int i = 0; i < unitPrefabList.Count; i++)
+        unitObjectList = UnitManager.GetPlayerUnitList();
+        unitCount = unitObjectList.Count;
+        for (int i = 0; i < unitCount; i++)
         {
-            unitObjectList.Add(Instantiate<GameObject>(unitPrefabList[i], transform));
+            unitObjectList[i].transform.parent = tr;
         }
+        
         myUnits = GetMyUnitList(jsonData["units"]);
     }
-
+    public Unit GetUnit(int num)
+    {
+        return myUnits[num].unit;
+    }
+    public bool GetUnitUsable(int num)
+    {
+        return myUnits[num].usable;
+    }
     public GameObject GetUnitObject(int num)
     {
         return unitObjectList[num];
     }
-
+    public void SetActiveAllUnit(bool value)
+    {
+        for(int i = 0; i < unitCount; i++)
+        {
+            unitObjectList[i].SetActive(value);
+        }
+    }
+    //덱 정보 저장
+    void SetMyDeck(JsonData jsonData)
+    {
+        SetDeck("1", jsonData);
+    }
+    void  SetDeck(string key,JsonData jsonData)
+    {
+        JsonData deckData = jsonData[key];
+        Deck deck = new Deck(deckData.Count);
+        for (int i = 0; i < deckData.Count; i++)
+        {
+            deck.SetUnitInSlot(i+1, (int)deckData[i]);
+        }
+        deckDic[int.Parse(key)] = deck;
+    }
     //데이터를 읽어서 저장
     List<MyUnit> GetMyUnitList(JsonData jsonData)
     {        
@@ -65,18 +141,18 @@ public class Player : MonoBehaviour {
         
         for (int i = 0; i < jsonData.Count; i++)
         {
-            string name = jsonData[i][0]["name"].ToString();
-            int level = int.Parse(jsonData[i][0]["level"].ToString());
-            int rank = int.Parse(jsonData[i][0]["rank"].ToString());
-            int category = int.Parse(jsonData[i][0]["category"].ToString());
-            int cost = int.Parse(jsonData[i][0]["cost"].ToString());
+            string name = (string)jsonData[i][0]["name"];
+            int level = (int)jsonData[i][0]["level"];
+            int rank = (int)jsonData[i][0]["rank"];
+            int category = (int)jsonData[i][0]["category"];
+            int cost = (int)jsonData[i][0]["cost"];
             JsonData statData = jsonData[i][0]["stat"];
-            Unit.Status status = new Unit.Status(statData[0].ToString(), statData[1].ToString(), 
-                statData[2].ToString(), statData[3].ToString(), statData[4].ToString(), statData[5].ToString());
+            Unit.Status status = new Unit.Status((int)statData[0], (int)statData[1],
+                (int)statData[2], (int)statData[3], (int)statData[4], (int)statData[5]);
 
             Unit unit = unitObjectList[i].GetComponent<Unit>();
             unit.Init(name, level, rank, (Unit.CATEGORY)category, cost, status);
-            myUnits.Add(new MyUnit(unit, bool.Parse(jsonData[i]["usable"].ToString())));
+            myUnits.Add(new MyUnit(unit, (bool)jsonData[i]["usable"]));
         }
         return myUnits;
     }

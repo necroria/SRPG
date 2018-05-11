@@ -156,11 +156,11 @@ public class Map : MonoBehaviour {
 
     public void Init(JsonData data)
     {
-        
+
         //data는 나중에 전체적인 유닛위치, 지형 정보같은 데이터들
-        mapXSize = int.Parse( data["xSize"].ToString());
-        mapYSize = int.Parse(data["ySize"].ToString());
-        maxTurn = int.Parse(data["maxTurn"].ToString());
+        mapXSize = (int)data["xSize"];
+        mapYSize = (int)data["ySize"];
+        maxTurn = (int)data["maxTurn"];
         //맵정보를 읽어서 위치마다 정보를 주는 함수
         //coll.size = Vector3.right * mapXSize  + Vector3.forward * mapYSize+ Vector3.up * 0.001f;
         transform.localScale = Vector3.forward * mapXSize / 10 + Vector3.right * mapYSize / 10 + Vector3.up;
@@ -168,7 +168,7 @@ public class Map : MonoBehaviour {
         {
             for (int x = 0; x < mapXSize; x++)
             {
-                location[new Pos(x, y)] = new PosInfo(x, y, (POSTYPE)int.Parse(data["tiles"][y*20+x].ToString()));
+                location[new Pos(x, y)] = new PosInfo(x, y, (POSTYPE)(int)data["tiles"][y*20+x]);
             }
         }
         SetStartingUnit(data["units"]);
@@ -176,46 +176,75 @@ public class Map : MonoBehaviour {
     }
     public void SetStartingUnit(JsonData unitData)
     {
-        for(int i = 0;i< unitData.Count; i++)
+        Player player = MainManager.Instance.player;
+        JsonData playerData = unitData["player"];
+        JsonData playalbeUnitData = unitData["playableUnit"];
+        JsonData enemyData = unitData["enemy"];
+        
+        Player.Deck deck = player.GetDeck(MainManager.Instance.battleType);
+
+        for (int i=0;i< playerData.Count; i++)
         {
-            if((Unit.IDENTIFY)int.Parse(unitData[i][3].ToString())==Unit.IDENTIFY.ALLY)
-                unitAllyList.Add(CreateUnit(unitData[i]));
-            else if((Unit.IDENTIFY)int.Parse(unitData[i][3].ToString()) == Unit.IDENTIFY.ENEMY)
-                unitEnemyList.Add(CreateUnit(unitData[i]));
+            int unitNumber = deck.GetUnitNumber(i+1);
+
+            if (unitNumber == -1)
+                continue;
+            GameObject unit = player.unitObjectList[unitNumber];
+            unit.SetActive(true);
+            MoveUnit(unit.GetComponent<Unit>(), (int)playerData[i]["x"], (int)playerData[i]["y"]);
+            unitAllyList.Add(player.unitObjectList[unitNumber]);
+            Debug.Log(unitAllyList.Count);
+        }
+        for (int i = 0; i < playalbeUnitData.Count; i++)
+        {
+            GameObject obj = null;
+            string str = (string)playalbeUnitData[i]["key"];
+            if ((int)playalbeUnitData[i]["unit_type"] == 0)
+            {
+
+                obj = UnitManager.GetUnit(int.Parse(str));
+            }
+            else
+            {
+                obj = UnitManager.GetUnit((int)playalbeUnitData[i]["unit_type"],str);
+            }
+            SetUnit(obj.GetComponent<Unit>(), playalbeUnitData[i], 0);
+            unitAllyList.Add(obj);
+        }
+        for (int i = 0;i< enemyData.Count; i++)
+        {
+            GameObject obj = null;
+            string str = (string)enemyData[i]["key"];
+            if ((int)enemyData[i]["unit_type"] == 0)
+            {
+
+                obj = UnitManager.GetUnit(int.Parse(str));
+            }
+            else
+            {
+                obj = UnitManager.GetUnit((int)enemyData[i]["unit_type"], str);
+            }
+            SetUnit(obj.GetComponent<Unit>(), enemyData[i], 1);
+            unitEnemyList.Add(obj);
         }        
     }
-    public GameObject CreateUnit(int x, int y,int unitIndex,Unit.IDENTIFY identify=Unit.IDENTIFY.ALLY,Unit.CATEGORY category = Unit.CATEGORY.KING,int rank = 0, int level = 1)
+    public void SetUnit(Unit unit,JsonData data,int identity)
     {
-        GameObject unitObject = Instantiate(unitPrefabs[unitIndex]);
-        unitObject.name = String.Format("unit{0:D2}{1:D2}", x,y);
         
-        Unit unit = unitObject.GetComponent<Unit>();
+        JsonData statData = data["stat"];
+        Unit.Status stat;
+        if (statData.IsString)
+        {
+            stat = UnitManager.GetStat((string)statData);
+        }else
+        {
+            stat = new Unit.Status((int)statData[0], (int)statData[1],
+                (int)statData[2], (int)statData[3], (int)statData[4], (int)statData[5]);
+        }
         
-        unit.Init(unitObject.name,level,rank,category,3,new Unit.Status(r.Range(30,90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90)));
-        
-        
-        
-        unit.identify = identify;
-        MoveUnit(unit, x, y);
- 
-        return unitObject;
-    }
-    public GameObject CreateUnit(JsonData data)
-    {
-        GameObject unitObject = Instantiate(unitPrefabs[int.Parse(data[2].ToString())]);
-        unitObject.name = String.Format("unit{0:D2}{1:D2}", int.Parse(data[0].ToString()), int.Parse(data[1].ToString()));
-        
-        Unit unit = unitObject.GetComponent<Unit>();
-
-        unit.Init(unitObject.name, int.Parse(data[6].ToString()), int.Parse(data[5].ToString()), (Unit.CATEGORY)int.Parse(data[4].ToString()), 3, new Unit.Status(r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90), r.Range(30, 90)));
-        
-
-         
-        unit.identify = (Unit.IDENTIFY)int.Parse(data[3].ToString());
-        MoveUnit(unit, int.Parse(data[0].ToString()), int.Parse(data[1].ToString()));
-        
-        
-        return unitObject;
+        unit.Init((string)data["name"], (int)data["level"], (int)data["rank"], (Unit.CATEGORY)(int)data["category"], -1,stat);
+        unit.identify = (Unit.IDENTIFY)identity;
+        MoveUnit(unit, (int)data["x"], (int)data["y"]);
     }
     public void MoveUnit(Unit unit,int x, int y, bool posInfoChange = true)
     {

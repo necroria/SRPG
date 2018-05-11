@@ -9,7 +9,7 @@ public class SkillManager : MonoBehaviour {
     public GameObject skillIconPrefab;
     // Use this for initialization
     void Start () {
-        DontDestroyOnLoad(this);
+
         Skill skill01 = new Skill();
         Skill skill02 = new Skill();
         skill01.Init("skill01", "skill01", 0, "skill01", "skill01",
@@ -29,7 +29,6 @@ public class SkillManager : MonoBehaviour {
 
     public static Skill GetSkill(int skillNum)
     {
-        Debug.Log("skill number = " + skillNum);
         return skillList[skillNum];
     }
     public static GameObject GetSkillIcon(int skillNum)

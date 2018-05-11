@@ -12,14 +12,14 @@ public class Unit : MonoBehaviour
     int _cost;
     public int cost
     {
-        get{return _cost;}
+        get { return _cost; }
     }
     public CATEGORY category;
     public enum CATEGORY
     {
         KING, ARCHER
     }
-    
+
     public Status stat;
     public int level;
     public int hp;
@@ -43,7 +43,7 @@ public class Unit : MonoBehaviour
         get { return identify; }
     }
     public AttackRangeManager.ATTACKRANGE range;
-
+    public delegate void UnitAI(Unit unit);
     public enum IDENTIFY
     {
         ALLY, ENEMY
@@ -155,6 +155,7 @@ public class Unit : MonoBehaviour
         get { return movePoint + 0; }//버프값이 적용된 값을 반환 }
 
     }
+    
 
     public Map.Pos Pos
     {

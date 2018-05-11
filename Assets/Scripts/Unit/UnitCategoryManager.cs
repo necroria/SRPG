@@ -15,14 +15,11 @@ public class UnitCategoryManager : MonoBehaviour {
     static Dictionary<Unit.CATEGORY, UnitCategory> categoryDic = new Dictionary<Unit.CATEGORY, UnitCategory>();
     public List<UnitCategory.Info> arli = new List<UnitCategory.Info>();
     public List<UnitCategory.Info> kili = new List<UnitCategory.Info>();
-    void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
+    
 
     // Use this for initialization
     void Start() {
-        Debug.Log("start UnitCategoryManager");
+
         //if (!_instance)
         //{
         //    _instance = this;

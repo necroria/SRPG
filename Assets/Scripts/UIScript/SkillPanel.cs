@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class SkillPanel : MonoBehaviour {
     private static SkillPanel _instance = null;
-    
+    GameObject gObj;
     public static SkillPanel instance    
     {
         get {
@@ -31,6 +31,7 @@ public class SkillPanel : MonoBehaviour {
     }
     private void Start()
     {
+        gObj = gameObject;
         RectTransform rtr = GetComponent<RectTransform>();
         
         RectTransform listRtr = listPanel.gameObject.GetComponent<RectTransform>();
@@ -58,5 +59,9 @@ public class SkillPanel : MonoBehaviour {
     public void OffSkillPanel()
     {
         gameObject.SetActive(false);
+    }
+    public bool GetActive()
+    {
+        return gObj.activeSelf;
     }
 }

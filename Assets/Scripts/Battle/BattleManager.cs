@@ -41,10 +41,9 @@ public class BattleManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         stageNum = MainManager.playBattleNum;
-        JsonData mapData = FileUtil.LoadMapData(stageNum);
+        JsonData mapData = FileUtil.LoadMapData(MainManager.Instance.mapCode);
         if (mapData == null)
         {
-            
             MainManager.LoadMainScene("데이터를 찾을 수 없습니다.");
         }
         else
@@ -63,9 +62,10 @@ public class BattleManager : MonoBehaviour {
             {
                 _instance = this;
             }
-            allyUnitState = new List<UNITSTATE>();
 
+            allyUnitState = new List<UNITSTATE>();
             enemyUnitState = new List<UNITSTATE>();
+            Debug.Log(map.unitAllyList.Count);
             for (int i = 0; i < map.unitAllyList.Count; i++)
             {
                 allyUnitState.Add(UNITSTATE.ACT);
@@ -623,7 +623,7 @@ public class BattleManager : MonoBehaviour {
                 battleUI.SetActivePanel(true, unit);
                 SkillPanel.instance.OffSkillPanel();
                 if (unit.identify == Unit.IDENTIFY.ALLY)
-                {
+                {                    
                     selectUnitIndex = map.unitAllyList.IndexOf(selectUnit);
                     if (allyUnitState[selectUnitIndex] == UNITSTATE.ACT)
                     {

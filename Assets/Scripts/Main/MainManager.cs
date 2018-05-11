@@ -6,26 +6,41 @@ using UnityEngine.SceneManagement;
 using System.IO;
 
 public class MainManager : MonoBehaviour {
+    private static MainManager _instance = null;
+    public static MainManager Instance
+    {
+        get { return _instance; }
+    }
     public static int playBattleNum = 1;
+    public enum STATE { MAIN,UNITMANAGEMENT,SELECTBATTLE,BATTLE}
+    STATE currentState = STATE.MAIN;
     public Text text;
     public Player player;
     public Transform[] mainUnitTr;
     public WaitPlace wp;
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
+    public string mapCode;
+    public int battleType;
+    public enum BATTLECATEGORY { NORMAL, }
+   
     private void Start()
     {
+        if(_instance == null)
+        {
+            _instance = this;
+        }
         player.Init();
-        wp.Init(player.unitPrefabList.Count);
+        wp.Init(player.unitCount,player);
         SetWaitUnit();
         SetMainUnit();
         
     }
-    public void LoadBattleScene()
+    public void LoadBattleScene(int battleType,string mapCode)
     {
+        this.battleType = battleType;
+        this.mapCode = mapCode;
+        player.SetActiveAllUnit(false);
         SceneManager.LoadScene("Battle");
+        
     }
     public static void LoadMainScene(string message)
     {
@@ -51,10 +66,25 @@ public class MainManager : MonoBehaviour {
     }
     void SetWaitUnit()
     {
-        for (int i = 0; i < player.unitPrefabList.Count; i++)
+        for (int i = 0; i < player.unitCount; i++)
         {
-            Debug.Log(i);
             player.GetUnitObject(i).transform.position = wp.GetPoint(i);
+        }
+    }
+    public void ChangeState(STATE state)
+    {
+        switch (state)
+        {
+            case STATE.MAIN:
+                SetMainUnit();
+                break;
+            case STATE.UNITMANAGEMENT:
+                SetWaitUnit();
+                break;
+            case STATE.SELECTBATTLE:
+                break;
+            case STATE.BATTLE:
+                break;
         }
     }
 }

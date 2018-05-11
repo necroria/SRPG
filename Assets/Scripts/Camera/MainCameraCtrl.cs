@@ -5,6 +5,7 @@ using UnityEngine;
 public class MainCameraCtrl : MonoBehaviour
 {
     BattleManager battleManager;
+    Transform tr;
     // Use this for initialization
     public void Init(BattleManager battleManager)
     {
@@ -15,6 +16,7 @@ public class MainCameraCtrl : MonoBehaviour
     public float sens = 0.3f;
     private void Start()
     {
+        tr = GetComponent<Transform>();
 #if UNITY_EDITOR
         sens = 1f;
 #elif UNITY_ANDROID
@@ -32,7 +34,7 @@ public class MainCameraCtrl : MonoBehaviour
 
             y = Input.GetAxis("Mouse Y");
             x = Input.GetAxis("Mouse X");
-            
+
 #elif UNITY_ANDROID
                 
 
@@ -44,7 +46,7 @@ public class MainCameraCtrl : MonoBehaviour
             }
 #endif
 
-            transform.position = Mathf.Clamp(transform.position.x - y, -battleManager.mapYSize / 2 - 5f + 3f, battleManager.mapYSize / 2 - 5f - 0f) * Vector3.right + Mathf.Clamp(transform.position.z + x, -battleManager.mapXSize / 2 + 2f, battleManager.mapXSize / 2 - 2f) * Vector3.forward + transform.position.y * Vector3.up;
+            tr.position = Mathf.Clamp(tr.position.x - y, -battleManager.mapYSize / 2 - 5f + 3f, battleManager.mapYSize / 2 - 5f - 0f) * Vector3.right + Mathf.Clamp(tr.position.z + x, -battleManager.mapXSize / 2 + 2f, battleManager.mapXSize / 2 - 2f) * Vector3.forward + tr.position.y * Vector3.up;
 
         }
     }
